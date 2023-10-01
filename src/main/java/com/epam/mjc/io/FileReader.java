@@ -6,19 +6,33 @@ import java.io.*;
 public class FileReader {
 
     public Profile getDataFromFile(File file) {
-        String st = "";
-        final InputStream targetStream;
-        byte[] bytes;
-        try {
+
+        //InputStream targetStream = Streams.getStreamFromFile(file);
+        //String st = Streams.convertStreamToString(targetStream);
+        InputStream targetStream = null;
+        try{
             targetStream = new DataInputStream(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
+
+        byte[] bytes;
+        String st = "";
+        try {
+            //targetStream = new DataInputStream(new FileInputStream(file));
             bytes = targetStream.readAllBytes();
             st = new String(bytes, "UTF-8");
-            targetStream.close();
-        } catch (FileNotFoundException e) {
 
         } catch (IOException e) {
-
+            System.out.println(e);
+        } finally {
+            try{
+                targetStream.close();
+            } catch (IOException e) {
+                System.out.println(e);
+            }
         }
+
         String name = "";
         Integer age = null;
         String email = "";
@@ -53,4 +67,41 @@ class KeyValue {
         this.key = splitted[0];
         this.value = splitted[1];
     };
+}
+
+class Streams {
+    public static InputStream getStreamFromFile(File file) {//throws FileNotFoundException
+        InputStream targetStream = null;
+        try{
+            targetStream = new DataInputStream(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
+        //InputStream targetStream = new DataInputStream(new FileInputStream(file));
+        return targetStream;
+    }
+
+    public static void closeStream(InputStream stream) {//throws FileNotFoundException
+        try{
+            stream.close();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    public static String convertStreamToString(InputStream stream) {//throws FileNotFoundException
+        byte[] bytes;
+        String st = "";
+        try {
+            //targetStream = new DataInputStream(new FileInputStream(file));
+            bytes = stream.readAllBytes();
+            st = new String(bytes, "UTF-8");
+
+        } catch (IOException e) {
+            System.out.println(e);
+        } finally {
+            Streams.closeStream(stream);
+        }
+        return st;
+    }
 }

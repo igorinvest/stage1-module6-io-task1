@@ -44,7 +44,6 @@ public class FileReader {
             KeyValue keyValue = new KeyValue(lines[i]);
             if(keyValue.key.equals("Name")) {
                 name = keyValue.value;
-                System.out.println("name: " + name);
             } else if (keyValue.key.equals("Age")) {
                 age = Integer.parseInt(keyValue.value);
             } else if (keyValue.key.equals("Email")) {
